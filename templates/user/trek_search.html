@@ -1,0 +1,129 @@
+{% extends 'layouts/base.html' %}
+
+{% block title %}Explore Treks - Trekking Management System{% endblock %}
+
+{% block content %}
+<div class="row mb-5">
+    <div class="col-md-8">
+        <h2 class="text-brand-forest mb-2 fw-bold">Explore Adventures</h2>
+        <p class="text-muted mb-0">Search hikes by keywords, difficulty range, and destination location.</p>
+    </div>
+</div>
+
+<div class="row g-4 mb-5">
+    <div class="col-lg-3">
+        <div class="card border-0 shadow-sm p-4 sticky-top" style="top: 2rem;">
+            <div class="form-section-header mb-3 pb-2">
+                <h5 class="fw-bold text-brand-forest mb-1"><i class="bi bi-funnel me-1"></i> Filters</h5>
+                <p class="text-muted small mb-0">Narrow down trek options</p>
+            </div>
+            <form method="GET" action="{{ url_for('user.explore') }}">
+                <div class="mb-3">
+                    <label class="form-label" for="search-input"><i class="bi bi-search"></i> Search Keywords</label>
+                    <input type="text" id="search-input" name="q" class="form-control" placeholder="Trek name or location..." value="{{ request.args.get('q', '') }}">
+                </div>
+
+                <div class="mb-3">
+                    <label class="form-label" for="difficulty-input"><i class="bi bi-bar-chart"></i> Difficulty</label>
+                    <select id="difficulty-input" name="difficulty" class="form-select">
+                        <option value="">All Difficulties</option>
+                        <option value="Easy" {% if selected_difficulty == 'Easy' %}selected{% endif %}>Easy</option>
+                        <option value="Moderate" {% if selected_difficulty == 'Moderate' %}selected{% endif %}>Moderate</option>
+                        <option value="Hard" {% if selected_difficulty == 'Hard' %}selected{% endif %}>Hard</option>
+                    </select>
+                </div>
+
+                <div class="mb-4">
+                    <label class="form-label" for="location-input"><i class="bi bi-geo-alt"></i> Location</label>
+                    <select id="location-input" name="location" class="form-select">
+                        <option value="">All Locations</option>
+                        {% for loc in locations %}
+                            <option value="{{ loc }}" {% if selected_location == loc %}selected{% endif %}>{{ loc }}</option>
+                        {% endfor %}
+                    </select>
+                </div>
+
+                <div class="d-grid gap-2">
+                    <button type="submit" class="btn btn-brand w-100">Apply Filters</button>
+                    <a href="{{ url_for('user.explore') }}" class="btn btn-outline-secondary w-100">Reset All</a>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <div class="col-lg-9">
+        <div class="card border-0 shadow-sm p-4">
+            <h4 class="text-brand-forest mb-4 fw-bold"><i class="bi bi-list-stars me-2"></i>Results ({{ treks|length }})</h4>
+            
+            {% if treks %}
+                <div class="row g-4">
+                    {% for trek in treks %}
+                        <div class="col-md-6">
+                            <div class="trek-modern-card">
+                                <div class="position-relative">
+                                    <div class="position-absolute top-0 start-0 m-3 z-3">
+                                        <span class="badge bg-brand-forest text-white">{{ trek.difficulty }}</span>
+                                    </div>
+                                    <div class="position-absolute top-0 end-0 m-3 z-3">
+                                        {% if trek.slots_available > 0 %}
+                                            <span class="badge bg-success text-white"><i class="bi bi-patch-check"></i> Available</span>
+                                        {% else %}
+                                            <span class="badge bg-secondary text-white"><i class="bi bi-slash-circle"></i> Sold Out</span>
+                                        {% endif %}
+                                    </div>
+                                </div>
+                                <div class="trek-card-body pt-5">
+                                    <h4 class="fw-bold mb-1">{{ trek.name }}</h4>
+                                    <span class="meta-icon-text mb-3"><i class="bi bi-geo-alt"></i> {{ trek.location }}</span>
+                                    
+                                    <hr class="my-2 border-light-subtle">
+                                    
+                                    <div class="row g-2 mb-3">
+                                        <div class="col-6">
+                                            <span class="meta-icon-text"><i class="bi bi-clock"></i> {{ trek.duration_days }} Days</span>
+                                        </div>
+                                    </div>
+                                    
+                                    <span class="meta-icon-text mb-2"><i class="bi bi-calendar-event"></i> {{ trek.start_date.strftime('%Y-%m-%d') }} to {{ trek.end_date.strftime('%Y-%m-%d') }}</span>
+                                    
+                                    <div class="my-3">
+                                        <div class="d-flex justify-content-between mb-1 small text-muted">
+                                            <span>Available Slots</span>
+                                            <span>{{ trek.slots_available }} / {{ trek.slots_total }}</span>
+                                        </div>
+                                        <div class="slots-progress-bar">
+                                            {% if trek.slots_total > 0 %}
+                                                {% set fill_percent = ((trek.slots_total - trek.slots_available) / trek.slots_total * 100)|int %}
+                                            {% else %}
+                                                {% set fill_percent = 0 %}
+                                            {% endif %}
+                                            <div class="slots-progress-fill" style="width: {{ fill_percent }}%;"></div>
+                                        </div>
+                                    </div>
+                                    
+                                    <div class="mt-auto">
+                                        {% if trek.slots_available > 0 %}
+                                            <form method="POST" action="{{ url_for('user.book', id=trek.id) }}">
+                                                <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
+                                                <button type="submit" class="btn btn-brand w-100"><i class="bi bi-calendar-plus"></i> Book Trek</button>
+                                            </form>
+                                        {% else %}
+                                            <button class="btn btn-secondary w-100" disabled><i class="bi bi-slash-circle"></i> Fully Booked</button>
+                                        {% endif %}
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    {% endfor %}
+                </div>
+            {% else %}
+                <div class="empty-state-card mt-3">
+                    <div class="empty-state-icon"><i class="bi bi-compass-fill"></i></div>
+                    <h5 class="fw-bold text-brand-forest">No hikes matched</h5>
+                    <p class="text-muted">No open treks matched your search criteria.</p>
+                </div>
+            {% endif %}
+        </div>
+    </div>
+</div>
+{% endblock %}

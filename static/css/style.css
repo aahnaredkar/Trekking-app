@@ -1,0 +1,518 @@
+@import url('https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,100..900;1,9..144,100..900&family=Albert+Sans:ital,wght@0,100..900;1,100..900&display=swap');
+
+:root {
+    --color-forest: #1e352f;
+    --color-terracotta: #d35400;
+    --color-cream: #fbfaf7;
+    --color-dark: #2c3e3a;
+    --color-muted: #6b7c77;
+    --color-white: #ffffff;
+    --font-heading: 'Fraunces', Georgia, serif;
+    --font-body: 'Albert Sans', sans-serif;
+    
+    --border-radius-sm: 6px;
+    --border-radius-md: 12px;
+    --border-radius-lg: 16px;
+    
+    --transition-smooth: all 0.25s cubic-bezier(0.4, 0, 0.2, 1);
+    
+    --shadow-subtle: 0 4px 12px rgba(30, 53, 47, 0.03);
+    --shadow-medium: 0 8px 30px rgba(30, 53, 47, 0.06);
+    --shadow-card: 0 10px 40px rgba(30, 53, 47, 0.04);
+}
+
+body {
+    background-color: var(--color-cream);
+    color: var(--color-dark);
+    font-family: var(--font-body);
+    line-height: 1.65;
+    -webkit-font-smoothing: antialiased;
+}
+
+h1, h2, h3, h4, h5, h6 {
+    font-family: var(--font-heading);
+    color: var(--color-forest);
+    font-weight: 700;
+}
+
+.text-brand-forest {
+    color: var(--color-forest);
+}
+
+.text-brand-terracotta {
+    color: var(--color-terracotta);
+}
+
+.bg-brand-forest {
+    background-color: var(--color-forest);
+}
+
+/* Base Buttons redesign */
+.btn {
+    border-radius: var(--border-radius-sm) !important;
+    padding: 0.6rem 1.4rem;
+    font-weight: 600;
+    font-size: 0.9rem;
+    transition: var(--transition-smooth) !important;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.5rem;
+}
+
+.btn-sm {
+    padding: 0.35rem 0.9rem;
+    font-size: 0.8rem;
+}
+
+.btn-lg {
+    padding: 0.75rem 1.8rem;
+    font-size: 1rem;
+}
+
+.btn-brand, .btn-primary {
+    background-color: var(--color-terracotta) !important;
+    color: var(--color-white) !important;
+    border: 1px solid var(--color-terracotta) !important;
+}
+
+.btn-brand:hover, .btn-primary:hover {
+    background-color: #b84a00 !important;
+    border-color: #b84a00 !important;
+    transform: translateY(-1px);
+    box-shadow: 0 4px 14px rgba(211, 84, 0, 0.18) !important;
+}
+
+.btn-outline-brand, .btn-outline-primary {
+    color: var(--color-terracotta) !important;
+    border: 1px solid var(--color-terracotta) !important;
+    background: transparent !important;
+}
+
+.btn-outline-brand:hover, .btn-outline-primary:hover {
+    background-color: var(--color-terracotta) !important;
+    color: var(--color-white) !important;
+    transform: translateY(-1px);
+    box-shadow: 0 4px 14px rgba(211, 84, 0, 0.15) !important;
+}
+
+.btn-outline-secondary {
+    border: 1px solid var(--color-muted) !important;
+    color: var(--color-forest) !important;
+    background: transparent !important;
+}
+
+.btn-outline-secondary:hover {
+    background-color: var(--color-muted) !important;
+    color: var(--color-white) !important;
+}
+
+.btn-danger {
+    background-color: #dc3545 !important;
+    border: 1px solid #dc3545 !important;
+    color: var(--color-white) !important;
+}
+
+.btn-danger:hover {
+    background-color: #bb2d3b !important;
+    border-color: #b02a37 !important;
+    transform: translateY(-1px);
+    box-shadow: 0 4px 14px rgba(220, 53, 69, 0.18) !important;
+}
+
+.btn-success {
+    background-color: #1e352f !important;
+    border: 1px solid #1e352f !important;
+    color: var(--color-white) !important;
+}
+
+.btn-success:hover {
+    background-color: #12211d !important;
+    border-color: #12211d !important;
+    transform: translateY(-1px);
+}
+
+/* Custom form fields */
+.form-control, .form-select {
+    border-radius: var(--border-radius-sm);
+    border: 1px solid #ced4da;
+    padding: 0.65rem 1rem;
+    font-size: 0.95rem;
+    transition: var(--transition-smooth);
+    background-color: var(--color-white);
+}
+
+.form-control:focus, .form-select:focus {
+    border-color: var(--color-forest);
+    box-shadow: 0 0 0 3px rgba(30, 53, 47, 0.08) !important;
+}
+
+.form-label {
+    font-weight: 600;
+    font-size: 0.88rem;
+    color: var(--color-forest);
+    margin-bottom: 0.4rem;
+    display: inline-flex;
+    align-items: center;
+    gap: 0.4rem;
+}
+
+.form-section-header {
+    margin-bottom: 2rem;
+    border-bottom: 1px solid rgba(30, 53, 47, 0.08);
+    padding-bottom: 1rem;
+}
+
+.form-section-title {
+    font-size: 1.7rem;
+    margin-bottom: 0.25rem;
+}
+
+.form-section-desc {
+    color: var(--color-muted);
+    font-size: 0.9rem;
+}
+
+/* Card Design & Containers */
+.card {
+    border-radius: var(--border-radius-md) !important;
+    border: 1px solid rgba(30, 53, 47, 0.06) !important;
+    box-shadow: var(--shadow-subtle) !important;
+    background-color: var(--color-white);
+    transition: var(--transition-smooth);
+}
+
+.card-title {
+    color: var(--color-forest);
+    font-weight: 700;
+}
+
+/* Dashboard Widget classes */
+.widget-card {
+    background: var(--color-white);
+    border-radius: var(--border-radius-md);
+    padding: 1.5rem;
+    box-shadow: var(--shadow-subtle);
+    border: 1px solid rgba(30, 53, 47, 0.05);
+    transition: var(--transition-smooth);
+    position: relative;
+    overflow: hidden;
+    height: 100%;
+}
+
+.widget-card::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 4px;
+    height: 100%;
+    background-color: var(--widget-accent, var(--color-forest));
+    opacity: 0.8;
+}
+
+.widget-card:hover {
+    transform: translateY(-3px);
+    box-shadow: var(--shadow-medium);
+    border-color: rgba(30, 53, 47, 0.1);
+}
+
+.widget-icon {
+    font-size: 1.4rem;
+    color: var(--widget-accent, var(--color-forest));
+    background: rgba(30, 53, 47, 0.04);
+    width: 42px;
+    height: 42px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 50%;
+    margin-bottom: 1rem;
+}
+
+.widget-title {
+    font-size: 0.82rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    color: var(--color-muted);
+    margin-bottom: 0.25rem;
+}
+
+.widget-number {
+    font-size: 2.2rem;
+    font-weight: 800;
+    font-family: var(--font-heading);
+    color: var(--color-forest);
+    line-height: 1.1;
+}
+
+/* Feature panel layout */
+.feature-panel {
+    background: var(--color-white);
+    border-radius: var(--border-radius-md);
+    padding: 1.75rem;
+    box-shadow: var(--shadow-subtle);
+    border-left: 6px solid var(--color-forest);
+    transition: var(--transition-smooth);
+    border-top: 1px solid rgba(30, 53, 47, 0.05);
+    border-right: 1px solid rgba(30, 53, 47, 0.05);
+    border-bottom: 1px solid rgba(30, 53, 47, 0.05);
+    display: flex;
+    flex-column-gap: 1.5rem;
+    flex-direction: column;
+    height: 100%;
+}
+
+.feature-panel:hover {
+    transform: translateY(-4px);
+    box-shadow: var(--shadow-medium);
+}
+
+.feature-panel-icon {
+    font-size: 2.2rem;
+    color: var(--color-terracotta);
+    margin-bottom: 1rem;
+}
+
+/* Trek Premium Travel Cards */
+.trek-modern-card {
+    background: var(--color-white);
+    border-radius: var(--border-radius-lg);
+    box-shadow: var(--shadow-card);
+    transition: var(--transition-smooth);
+    border: 1px solid rgba(30, 53, 47, 0.05);
+    overflow: hidden;
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+}
+
+.trek-modern-card:hover {
+    transform: translateY(-4px);
+    box-shadow: var(--shadow-medium);
+}
+
+.trek-card-body {
+    padding: 1.5rem;
+    flex-grow: 1;
+    display: flex;
+    flex-direction: column;
+}
+
+.slots-progress-bar {
+    height: 6px;
+    background: rgba(30, 53, 47, 0.08);
+    border-radius: 10px;
+    overflow: hidden;
+}
+
+.slots-progress-fill {
+    height: 100%;
+    background: var(--color-terracotta);
+    border-radius: 10px;
+}
+
+.meta-icon-text {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.4rem;
+    font-size: 0.88rem;
+    color: var(--color-muted);
+}
+
+/* Table Style Alignment */
+.table-container-modern {
+    background: var(--color-white);
+    border-radius: var(--border-radius-md);
+    box-shadow: var(--shadow-subtle);
+    border: 1px solid rgba(30, 53, 47, 0.05);
+    overflow: hidden;
+    margin-bottom: 1.5rem;
+}
+
+.table-modern {
+    width: 100%;
+    border-collapse: collapse;
+    margin: 0;
+}
+
+.table-modern thead th {
+    background-color: var(--color-forest);
+    color: var(--color-white);
+    text-transform: uppercase;
+    font-size: 0.72rem;
+    letter-spacing: 0.07em;
+    padding: 1rem 1.25rem;
+    border: none;
+    font-weight: 700;
+}
+
+.table-modern tbody tr {
+    transition: var(--transition-smooth);
+    border-bottom: 1px solid #f1ece9;
+}
+
+.table-modern tbody tr:last-child {
+    border-bottom: none;
+}
+
+.table-modern tbody tr:hover {
+    background-color: #faf9f6;
+}
+
+.table-modern tbody td {
+    padding: 1.1rem 1.25rem;
+    vertical-align: middle;
+}
+
+/* Empty State Cards */
+.empty-state-card {
+    text-align: center;
+    padding: 4rem 2rem;
+    background: var(--color-white);
+    border-radius: var(--border-radius-md);
+    box-shadow: var(--shadow-subtle);
+    border: 2px dashed rgba(30, 53, 47, 0.15);
+    max-width: 500px;
+    margin: 2rem auto;
+}
+
+.empty-state-icon {
+    font-size: 3.2rem;
+    color: var(--color-muted);
+    opacity: 0.5;
+    margin-bottom: 1.5rem;
+    display: inline-block;
+}
+
+/* Password Eye Overlay Style */
+.password-group-wrapper {
+    position: relative;
+    display: flex;
+    align-items: center;
+    width: 100%;
+}
+
+.password-group-wrapper input {
+    padding-right: 2.75rem !important;
+}
+
+.password-toggle-btn {
+    position: absolute;
+    right: 1px;
+    top: 1px;
+    bottom: 1px;
+    background: transparent;
+    border: none;
+    padding: 0 0.85rem;
+    color: var(--color-muted);
+    font-size: 1.1rem;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-top-right-radius: 5px;
+    border-bottom-right-radius: 5px;
+    z-index: 10;
+    transition: color 0.15s ease, background-color 0.15s ease;
+}
+
+.password-toggle-btn:hover {
+    color: var(--color-terracotta);
+    background-color: rgba(211, 84, 0, 0.05);
+}
+
+/* Badge Tweaks */
+.badge {
+    padding: 0.45em 0.85em !important;
+    font-weight: 600 !important;
+    border-radius: 30px !important;
+    font-size: 0.72rem !important;
+    display: inline-flex;
+    align-items: center;
+    gap: 0.25rem;
+    vertical-align: middle;
+}
+
+/* Navbar Tuning */
+.navbar {
+    padding: 0.9rem 1.5rem !important;
+    box-shadow: 0 4px 20px rgba(30, 53, 47, 0.04);
+}
+
+.navbar-brand {
+    font-size: 1.6rem !important;
+    letter-spacing: -0.02em;
+}
+
+.navbar .nav-link {
+    font-weight: 600;
+    margin: 0 0.35rem;
+    transition: var(--transition-smooth);
+}
+
+.navbar .form-control {
+    width: 240px;
+    border-radius: 20px;
+    background-color: rgba(255, 255, 255, 0.1) !important;
+    border: 1px solid rgba(255, 255, 255, 0.15);
+    color: var(--color-white);
+    font-size: 0.85rem;
+    padding: 0.45rem 1rem;
+    transition: var(--transition-smooth);
+}
+
+.navbar .form-control::placeholder {
+    color: rgba(255, 255, 255, 0.5);
+}
+
+.navbar .form-control:focus {
+    width: 300px;
+    border-color: rgba(255, 255, 255, 0.5);
+    background-color: rgba(255, 255, 255, 0.15) !important;
+    box-shadow: none !important;
+}
+
+/* Responsive Style Adjustments */
+@media (max-width: 1200px) {
+    .navbar .form-control {
+        width: 190px;
+    }
+    .navbar .form-control:focus {
+        width: 240px;
+    }
+}
+
+@media (max-width: 992px) {
+    .navbar .form-control {
+        width: 100%;
+        margin-bottom: 0.5rem;
+    }
+    .navbar .form-control:focus {
+        width: 100%;
+    }
+}
+
+@media (max-width: 768px) {
+    body {
+        font-size: 0.92rem;
+        line-height: 1.5;
+    }
+    .widget-number {
+        font-size: 1.8rem;
+    }
+    .card {
+        padding: 1.25rem !important;
+    }
+    .table-container-modern {
+        border-radius: 8px;
+    }
+}
+
+@media (max-width: 576px) {
+    .btn {
+        padding: 0.5rem 1rem;
+        font-size: 0.85rem;
+    }
+}

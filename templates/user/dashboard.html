@@ -1,0 +1,139 @@
+{% extends 'layouts/base.html' %}
+
+{% block title %}Trekker Dashboard - Trekking Management System{% endblock %}
+
+{% block content %}
+<div class="row align-items-center mb-5">
+    <div class="col-md-7">
+        <h2 class="text-brand-forest mb-0 fw-bold">Trekker Board</h2>
+        <p class="text-muted mb-0">Welcome, {{ current_user.username }}. Review your registrations, history, and discover new paths.</p>
+    </div>
+    <div class="col-md-5 text-md-end mt-3 mt-md-0">
+        <a href="{{ url_for('user.explore') }}" class="btn btn-brand"><i class="bi bi-compass"></i> Explore Open Treks</a>
+        <a href="{{ url_for('user.profile') }}" class="btn btn-outline-brand ms-2"><i class="bi bi-person"></i> Edit Profile</a>
+    </div>
+</div>
+
+<div class="row g-4 mb-5">
+    <div class="col-lg-8">
+        <!-- Upcoming Bookings Widget Card -->
+        <div class="card border-0 shadow-sm p-4 mb-4">
+            <h4 class="text-brand-forest mb-4 fw-bold"><i class="bi bi-clock-history me-2"></i>Upcoming Bookings</h4>
+            {% if upcoming_bookings %}
+                <div class="row g-3">
+                    {% for b in upcoming_bookings %}
+                        <div class="col-12">
+                            <div class="p-3 border rounded-3 d-flex justify-content-between align-items-center bg-light">
+                                <div>
+                                    <h5 class="mb-1 fw-bold"><a href="{{ url_for('user.booking_detail', id=b.id) }}" class="text-brand-forest text-decoration-none">{{ b.trek.name }}</a></h5>
+                                    <p class="mb-0 text-muted small"><i class="bi bi-geo-alt"></i> {{ b.trek.location }} | <i class="bi bi-calendar"></i> {{ b.trek.start_date.strftime('%Y-%m-%d') }} to {{ b.trek.end_date.strftime('%Y-%m-%d') }}</p>
+                                    <span class="badge bg-success mt-2"><i class="bi bi-check-circle-fill"></i> Booked on {{ b.booking_date.strftime('%Y-%m-%d') }}</span>
+                                </div>
+                                <div class="text-end">
+                                    <form method="POST" action="{{ url_for('user.cancel', id=b.id) }}" onsubmit="return confirm('Are you sure you want to cancel this booking?');">
+                                        <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
+                                        <button type="submit" class="btn btn-outline-danger btn-sm"><i class="bi bi-x-circle"></i> Cancel</button>
+                                    </form>
+                                </div>
+                            </div>
+                        </div>
+                    {% endfor %}
+                </div>
+            {% else %}
+                <div class="empty-state-card py-4 my-2">
+                    <div class="empty-state-icon" style="font-size: 2.2rem;"><i class="bi bi-calendar2-x"></i></div>
+                    <h5 class="fw-bold text-brand-forest">No upcoming bookings</h5>
+                    <p class="text-muted small">You have no upcoming bookings. <a href="{{ url_for('user.explore') }}" class="text-brand-terracotta">Find an adventure!</a></p>
+                </div>
+            {% endif %}
+        </div>
+
+        <!-- Trekking History Table -->
+        <div class="card border-0 shadow-sm p-4">
+            <h4 class="text-brand-forest mb-4 fw-bold"><i class="bi bi-journal-album me-2"></i>Trekking History & Completed Excursions</h4>
+            {% if completed_bookings %}
+                <div class="table-container-modern table-responsive">
+                    <table class="table-modern table-striped">
+                        <thead>
+                            <tr>
+                                <th>Trek Name</th>
+                                <th>Location</th>
+                                <th>Booking Date</th>
+                                <th class="text-end">Status</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {% for b in completed_bookings %}
+                                <tr>
+                                    <td><strong class="text-brand-forest">{{ b.trek.name }}</strong></td>
+                                    <td><i class="bi bi-geo-alt small"></i> {{ b.trek.location }}</td>
+                                    <td class="text-muted">{{ b.booking_date.strftime('%Y-%m-%d') }}</td>
+                                    <td class="text-end"><span class="badge bg-info text-dark"><i class="bi bi-check-all"></i> Completed</span></td>
+                                </tr>
+                            {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
+            {% else %}
+                <div class="empty-state-card py-4 my-2">
+                    <div class="empty-state-icon" style="font-size: 2.2rem;"><i class="bi bi-folder-x"></i></div>
+                    <h5 class="fw-bold text-brand-forest">No completed treks</h5>
+                    <p class="text-muted small">No completed treks recorded yet.</p>
+                </div>
+            {% endif %}
+        </div>
+    </div>
+
+    <div class="col-lg-4">
+        <!-- Cancelled Bookings Card -->
+        <div class="card border-0 shadow-sm p-4 mb-4">
+            <h4 class="text-brand-forest mb-3 fw-bold"><i class="bi bi-x-square me-2"></i>Cancelled</h4>
+            {% if cancelled_bookings %}
+                <div class="list-group list-group-flush">
+                    {% for b in cancelled_bookings %}
+                        <div class="list-group-item border-0 py-2 px-0 d-flex justify-content-between align-items-center">
+                            <div>
+                                <h6 class="mb-0 text-muted fw-bold">{{ b.trek.name }}</h6>
+                                <small class="text-muted">{{ b.trek.location }}</small>
+                            </div>
+                            <span class="badge bg-secondary">Cancelled</span>
+                        </div>
+                    {% endfor %}
+                </div>
+            {% else %}
+                <div class="text-center py-3">
+                    <p class="text-muted small mb-0">No cancelled records.</p>
+                </div>
+            {% endif %}
+        </div>
+
+        <!-- Available Treks Card -->
+        <div class="card border-0 shadow-sm p-4">
+            <h4 class="text-brand-forest mb-3 fw-bold"><i class="bi bi-compass me-2"></i>New Adventures</h4>
+            {% if open_treks %}
+                <div class="list-group list-group-flush">
+                    {% for trek in open_treks[:5] %}
+                        <div class="list-group-item border-0 py-3 px-0 d-flex justify-content-between align-items-center">
+                            <div>
+                                <h6 class="mb-1 fw-bold"><a href="{{ url_for('user.explore') }}" class="text-brand-forest text-decoration-none">{{ trek.name }}</a></h6>
+                                <small class="text-muted"><i class="bi bi-geo-alt"></i> {{ trek.location }} ({{ trek.difficulty }})</small>
+                            </div>
+                            <form method="POST" action="{{ url_for('user.book', id=trek.id) }}">
+                                <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
+                                <button type="submit" class="btn btn-brand btn-sm">Book</button>
+                            </form>
+                        </div>
+                    {% endfor %}
+                </div>
+                {% if open_treks|length > 5 %}
+                    <a href="{{ url_for('user.explore') }}" class="btn btn-link text-brand-terracotta btn-sm p-0 mt-3 d-block">View all tours &rarr;</a>
+                {% endif %}
+            {% else %}
+                <div class="text-center py-3">
+                    <p class="text-muted small mb-0">No open treks available.</p>
+                </div>
+            {% endif %}
+        </div>
+    </div>
+</div>
+{% endblock %}

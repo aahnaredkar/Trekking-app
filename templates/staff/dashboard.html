@@ -1,0 +1,90 @@
+{% extends 'layouts/base.html' %}
+
+{% block title %}Staff Dashboard - Trekking Management System{% endblock %}
+
+{% block content %}
+<div class="row align-items-center mb-5">
+    <div class="col-md-8">
+        <h2 class="text-brand-forest mb-0 fw-bold">Staff Dashboard</h2>
+        <p class="text-muted mb-0">Assigned excursions and tour logs management.</p>
+    </div>
+    <div class="col-md-4 text-md-end">
+        <span class="badge bg-brand-forest text-white p-2 px-3"><i class="bi bi-person-badge me-1"></i> Guide: {{ current_user.username }}</span>
+    </div>
+</div>
+
+<h4 class="text-brand-forest mb-4 fw-bold"><i class="bi bi-map me-2"></i>My Assigned Treks</h4>
+
+{% if treks_data %}
+    <div class="row g-4">
+        {% for item in treks_data %}
+            <div class="col-md-6 col-lg-4">
+                <div class="trek-modern-card">
+                    <div class="position-relative">
+                        <div class="position-absolute top-0 start-0 m-3 z-3">
+                            <span class="badge bg-brand-forest text-white">{{ item.trek.difficulty }}</span>
+                        </div>
+                        <div class="position-absolute top-0 end-0 m-3 z-3">
+                            {% set s = item.trek.status %}
+                            {% if s == 'Open' %}
+                                <span class="badge bg-success"><i class="bi bi-unlock-fill me-1"></i>{{ s }}</span>
+                            {% elif s == 'Pending' %}
+                                <span class="badge bg-warning text-dark"><i class="bi bi-hourglass-split me-1"></i>{{ s }}</span>
+                            {% elif s == 'Closed' %}
+                                <span class="badge bg-secondary"><i class="bi bi-lock-fill me-1"></i>{{ s }}</span>
+                            {% elif s == 'Completed' %}
+                                <span class="badge bg-info"><i class="bi bi-check2-all me-1"></i>{{ s }}</span>
+                            {% else %}
+                                <span class="badge bg-primary">{{ s }}</span>
+                            {% endif %}
+                        </div>
+                    </div>
+                    <div class="trek-card-body pt-5">
+                        <h4 class="fw-bold mb-1">{{ item.trek.name }}</h4>
+                        <span class="meta-icon-text mb-3"><i class="bi bi-geo-alt"></i> {{ item.trek.location }}</span>
+                        
+                        <hr class="my-2 border-light-subtle">
+                        
+                        <div class="row g-2 mb-3">
+                            <div class="col-6">
+                                <span class="meta-icon-text"><i class="bi bi-clock"></i> {{ item.trek.duration_days }} Days</span>
+                            </div>
+                            <div class="col-6">
+                                <span class="meta-icon-text"><i class="bi bi-people"></i> {{ item.booked_count }} Registered</span>
+                            </div>
+                        </div>
+                        
+                        <span class="meta-icon-text mb-2"><i class="bi bi-calendar-event"></i> {{ item.trek.start_date.strftime('%Y-%m-%d') }} to {{ item.trek.end_date.strftime('%Y-%m-%d') }}</span>
+                        
+                        <div class="my-3">
+                            <div class="d-flex justify-content-between mb-1 small text-muted">
+                                <span>Available Slots</span>
+                                <span>{{ item.trek.slots_available }} / {{ item.trek.slots_total }}</span>
+                            </div>
+                            <div class="slots-progress-bar">
+                                {% if item.trek.slots_total > 0 %}
+                                    {% set fill_percent = ((item.trek.slots_total - item.trek.slots_available) / item.trek.slots_total * 100)|int %}
+                                {% else %}
+                                    {% set fill_percent = 0 %}
+                                {% endif %}
+                                <div class="slots-progress-fill" style="width: {{ fill_percent }}%;"></div>
+                            </div>
+                        </div>
+                        
+                        <div class="mt-auto pt-3 d-flex gap-2">
+                            <a href="{{ url_for('staff.edit_slots', id=item.trek.id) }}" class="btn btn-brand btn-sm flex-fill"><i class="bi bi-pencil-square"></i> Edit slots</a>
+                            <a href="{{ url_for('staff.participants', id=item.trek.id) }}" class="btn btn-outline-secondary btn-sm flex-fill"><i class="bi bi-list-task"></i> Roster</a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        {% endfor %}
+    </div>
+{% else %}
+    <div class="empty-state-card">
+        <div class="empty-state-icon"><i class="bi bi-map-fill"></i></div>
+        <h4 class="fw-bold text-brand-forest">No assigned treks</h4>
+        <p class="text-muted">You do not have any assigned treks at this time.</p>
+    </div>
+{% endif %}
+{% endblock %}

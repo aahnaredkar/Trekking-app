@@ -1,0 +1,89 @@
+{% extends 'layouts/base.html' %}
+{% from 'components/form_macros.html' import render_field %}
+
+{% block title %}Create Trek - Trekking Management System{% endblock %}
+
+{% block content %}
+<div class="row justify-content-center">
+    <div class="col-lg-8">
+        <div class="row align-items-center mb-4">
+            <div class="col">
+                <h2 class="text-brand-forest mb-0 fw-bold"><i class="bi bi-plus-circle me-2"></i>Create New Trek</h2>
+                <p class="text-muted mb-0">Define a new trekking route and its parameters.</p>
+            </div>
+            <div class="col-auto">
+                <a href="{{ url_for('admin.treks') }}" class="btn btn-outline-secondary"><i class="bi bi-arrow-left me-1"></i> Back</a>
+            </div>
+        </div>
+        <div class="card border-0 shadow-sm p-4">
+            <form method="POST" action="">
+                {{ form.hidden_tag() }}
+
+                <div class="form-section-header">
+                    <h5 class="form-section-title fw-bold"><i class="bi bi-info-circle me-2 text-brand-terracotta"></i>Basic Information</h5>
+                    <p class="form-section-desc">Name, location, and classification details.</p>
+                </div>
+                <div class="row">
+                    <div class="col-md-6">{{ render_field(form.name) }}</div>
+                    <div class="col-md-6">{{ render_field(form.location) }}</div>
+                </div>
+                <div class="row">
+                    <div class="col-md-4">{{ render_field(form.difficulty) }}</div>
+                    <div class="col-md-4">{{ render_field(form.duration_days) }}</div>
+                    <div class="col-md-4">{{ render_field(form.status) }}</div>
+                </div>
+
+                <div class="form-section-header mt-4">
+                    <h5 class="form-section-title fw-bold"><i class="bi bi-calendar-range me-2 text-brand-terracotta"></i>Schedule & Capacity</h5>
+                    <p class="form-section-desc">Date ranges and slot allocation.</p>
+                </div>
+                <div class="row">
+                    <div class="col-md-6">{{ render_field(form.slots_total) }}</div>
+                    <div class="col-md-6">{{ render_field(form.slots_available) }}</div>
+                </div>
+                <div class="row">
+                    <div class="col-md-6">{{ render_field(form.start_date, id="start_date") }}</div>
+                    <div class="col-md-6">{{ render_field(form.end_date, id="end_date") }}</div>
+                </div>
+
+                <div class="form-section-header mt-4">
+                    <h5 class="form-section-title fw-bold"><i class="bi bi-person-badge me-2 text-brand-terracotta"></i>Staff Assignment</h5>
+                    <p class="form-section-desc">Assign a guide to this trek route (optional).</p>
+                </div>
+                {{ render_field(form.assigned_staff_id) }}
+
+                <div class="form-section-header mt-4">
+                    <h5 class="form-section-title fw-bold"><i class="bi bi-text-paragraph me-2 text-brand-terracotta"></i>Description</h5>
+                    <p class="form-section-desc">Optional details about the trek route.</p>
+                </div>
+                {{ render_field(form.description) }}
+
+                <div class="d-grid mt-4">
+                    {{ form.submit(class="btn btn-brand btn-lg") }}
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+<script>
+document.addEventListener("DOMContentLoaded", function() {
+    var today = new Date().toISOString().split('T')[0];
+    var startInput = document.getElementById("start_date");
+    var endInput = document.getElementById("end_date");
+    if (startInput) {
+        startInput.setAttribute("min", today);
+        startInput.addEventListener("change", function() {
+            if (endInput) {
+                endInput.setAttribute("min", startInput.value || today);
+            }
+        });
+        if (startInput.value) {
+            endInput.setAttribute("min", startInput.value);
+        } else {
+            endInput.setAttribute("min", today);
+        }
+    }
+});
+</script>
+{% endblock %}

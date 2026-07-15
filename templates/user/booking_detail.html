@@ -1,0 +1,81 @@
+{% extends 'layouts/base.html' %}
+
+{% block title %}Booking Details - Trekking Management System{% endblock %}
+
+{% block content %}
+<div class="row justify-content-center mb-4">
+    <div class="col-lg-8">
+        <div class="row align-items-center">
+            <div class="col">
+                <h2 class="text-brand-forest mb-0 fw-bold"><i class="bi bi-receipt-cutoff me-2"></i>Booking Sheet</h2>
+                <p class="text-muted mb-0">Booking <span class="badge bg-brand-forest">#{{ booking.id }}</span> details and itinerary.</p>
+            </div>
+            <div class="col-auto">
+                <a href="{{ url_for('user.dashboard') }}" class="btn btn-outline-secondary"><i class="bi bi-arrow-left me-1"></i> Dashboard</a>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="row justify-content-center g-4">
+    <div class="col-lg-8">
+        <div class="card border-0 shadow-sm p-4 mb-4">
+            <div class="d-flex justify-content-between align-items-center mb-3">
+                <h3 class="text-brand-forest mb-0 fw-bold">{{ booking.trek.name }}</h3>
+                <span class="badge bg-brand-forest">{{ booking.trek.difficulty }}</span>
+            </div>
+            <span class="meta-icon-text mb-4 d-inline-block"><i class="bi bi-geo-alt"></i> {{ booking.trek.location }}</span>
+
+            <div class="row g-3 mb-4">
+                <div class="col-md-6">
+                    <div class="p-3 border rounded-3 bg-light">
+                        <small class="text-muted d-block"><i class="bi bi-calendar-range me-1"></i>Trek Dates</small>
+                        <strong class="text-brand-forest">{{ booking.trek.start_date.strftime('%Y-%m-%d') }} to {{ booking.trek.end_date.strftime('%Y-%m-%d') }}</strong>
+                    </div>
+                </div>
+                <div class="col-md-6">
+                    <div class="p-3 border rounded-3 bg-light">
+                        <small class="text-muted d-block"><i class="bi bi-clock me-1"></i>Duration</small>
+                        <strong class="text-brand-forest">{{ booking.trek.duration_days }} days</strong>
+                    </div>
+                </div>
+                <div class="col-md-6">
+                    <div class="p-3 border rounded-3 bg-light">
+                        <small class="text-muted d-block"><i class="bi bi-calendar-check me-1"></i>Booking Date</small>
+                        <strong class="text-brand-forest">{{ booking.booking_date.strftime('%Y-%m-%d %H:%M') }} UTC</strong>
+                    </div>
+                </div>
+                <div class="col-md-6">
+                    <div class="p-3 border rounded-3 bg-light">
+                        <small class="text-muted d-block"><i class="bi bi-flag me-1"></i>Booking Status</small>
+                        {% if booking.status == 'Booked' %}
+                            <span class="badge bg-success"><i class="bi bi-check-circle me-1"></i>{{ booking.status }}</span>
+                        {% elif booking.status == 'Cancelled' %}
+                            <span class="badge bg-secondary"><i class="bi bi-x-circle me-1"></i>{{ booking.status }}</span>
+                        {% else %}
+                            <span class="badge bg-info"><i class="bi bi-check2-all me-1"></i>{{ booking.status }}</span>
+                        {% endif %}
+                    </div>
+                </div>
+            </div>
+
+            {% if booking.trek.description %}
+                <div class="mb-4 p-3 border rounded-3 bg-light">
+                    <small class="text-muted d-block mb-1"><i class="bi bi-text-paragraph me-1"></i>Description</small>
+                    <p class="mb-0">{{ booking.trek.description }}</p>
+                </div>
+            {% endif %}
+            
+            {% if booking.status == 'Booked' %}
+                <hr class="my-4 border-light-subtle">
+                <div class="d-flex justify-content-end">
+                    <form method="POST" action="{{ url_for('user.cancel', id=booking.id) }}" onsubmit="return confirm('Are you sure you want to cancel this booking?');">
+                        <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
+                        <button type="submit" class="btn btn-outline-danger"><i class="bi bi-x-circle me-1"></i> Cancel Booking</button>
+                    </form>
+                </div>
+            {% endif %}
+        </div>
+    </div>
+</div>
+{% endblock %}

@@ -1,0 +1,116 @@
+{% extends 'layouts/base.html' %}
+
+{% block title %}Admin Dashboard - Trekking Management System{% endblock %}
+
+{% block content %}
+<div class="row align-items-center mb-5">
+    <div class="col-md-8">
+        <h2 class="text-brand-forest mb-0 fw-bold">Admin Console</h2>
+        <p class="text-muted mb-0">System dashboard and central control settings.</p>
+    </div>
+    <div class="col-md-4 text-md-end">
+        <span class="badge bg-brand-forest text-white p-2 px-3"><i class="bi bi-shield-check me-1"></i> Admin: {{ current_user.username }}</span>
+    </div>
+</div>
+
+<!-- SaaS Widgets Grid -->
+<div class="row g-4 mb-5">
+    <div class="col-sm-6 col-lg-3">
+        <div class="widget-card" style="--widget-accent: var(--color-forest)">
+            <div class="d-flex justify-content-between align-items-start">
+                <div>
+                    <div class="widget-title">Total Treks</div>
+                    <div class="widget-number">{{ total_treks }}</div>
+                </div>
+                <div class="widget-icon">
+                    <i class="bi bi-map"></i>
+                </div>
+            </div>
+            <p class="text-muted small mt-2 mb-0">Active and pending routes</p>
+        </div>
+    </div>
+    <div class="col-sm-6 col-lg-3">
+        <div class="widget-card" style="--widget-accent: var(--color-terracotta)">
+            <div class="d-flex justify-content-between align-items-start">
+                <div>
+                    <div class="widget-title">Total Trekkers</div>
+                    <div class="widget-number">{{ total_users }}</div>
+                </div>
+                <div class="widget-icon">
+                    <i class="bi bi-people"></i>
+                </div>
+            </div>
+            <p class="text-muted small mt-2 mb-0">Registered account holders</p>
+        </div>
+    </div>
+    <div class="col-sm-6 col-lg-3">
+        <div class="widget-card" style="--widget-accent: #27ae60">
+            <div class="d-flex justify-content-between align-items-start">
+                <div>
+                    <div class="widget-title">Staff Guides</div>
+                    <div class="widget-number">{{ total_staff }}</div>
+                </div>
+                <div class="widget-icon">
+                    <i class="bi bi-person-badge"></i>
+                </div>
+            </div>
+            <p class="text-muted small mt-2 mb-0">Approved and pending staff</p>
+        </div>
+    </div>
+    <div class="col-sm-6 col-lg-3">
+        <div class="widget-card" style="--widget-accent: #2980b9">
+            <div class="d-flex justify-content-between align-items-start">
+                <div>
+                    <div class="widget-title">Total Bookings</div>
+                    <div class="widget-number">{{ total_bookings }}</div>
+                </div>
+                <div class="widget-icon">
+                    <i class="bi bi-journal-check"></i>
+                </div>
+            </div>
+            <p class="text-muted small mt-2 mb-0">Booked, active & cancelled</p>
+        </div>
+    </div>
+</div>
+
+<h4 class="text-brand-forest mb-4 fw-bold"><i class="bi bi-sliders me-2"></i>Management Modules</h4>
+
+<!-- Management Panels Grid -->
+<div class="row g-4">
+    <div class="col-md-3">
+        <div class="feature-panel" style="border-left-color: var(--color-forest);">
+            <div class="feature-panel-icon"><i class="bi bi-signpost-split"></i></div>
+            <h5 class="fw-bold mb-2">Trek Routes</h5>
+            <p class="text-muted small mb-4 flex-grow-1">Create, edit, or remove trek routes, adjust slot allocations and track statuses.</p>
+            <div class="d-flex gap-2">
+                <a href="{{ url_for('admin.treks') }}" class="btn btn-brand btn-sm flex-grow-1">Manage Treks</a>
+                <a href="{{ url_for('admin.trek_create') }}" class="btn btn-outline-secondary btn-sm"><i class="bi bi-plus"></i></a>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-3">
+        <div class="feature-panel" style="border-left-color: var(--color-terracotta);">
+            <div class="feature-panel-icon"><i class="bi bi-person-rolodex"></i></div>
+            <h5 class="fw-bold mb-2">Staff Directory</h5>
+            <p class="text-muted small mb-4 flex-grow-1">Approve, reject, or blacklist staff guide registrations, review qualifications.</p>
+            <a href="{{ url_for('admin.staff') }}" class="btn btn-brand btn-sm w-100">Manage Guides</a>
+        </div>
+    </div>
+    <div class="col-md-3">
+        <div class="feature-panel" style="border-left-color: #27ae60;">
+            <div class="feature-panel-icon"><i class="bi bi-person-lines-fill"></i></div>
+            <h5 class="fw-bold mb-2">Trekkers Info</h5>
+            <p class="text-muted small mb-4 flex-grow-1">View registered trekkers profile information, emails, and transaction histories.</p>
+            <a href="{{ url_for('admin.trekkers') }}" class="btn btn-brand btn-sm w-100">Manage Trekkers</a>
+        </div>
+    </div>
+    <div class="col-md-3">
+        <div class="feature-panel" style="border-left-color: #2980b9;">
+            <div class="feature-panel-icon"><i class="bi bi-receipt"></i></div>
+            <h5 class="fw-bold mb-2">Booking Ledger</h5>
+            <p class="text-muted small mb-4 flex-grow-1">Review transaction timelines, inspect details of booked, active or cancelled reservations.</p>
+            <a href="{{ url_for('admin.bookings') }}" class="btn btn-brand btn-sm w-100">View Ledgers</a>
+        </div>
+    </div>
+</div>
+{% endblock %}

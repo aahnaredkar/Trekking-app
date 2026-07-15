@@ -1,0 +1,46 @@
+{% extends 'layouts/base.html' %}
+{% from 'components/form_macros.html' import render_field %}
+
+{% block title %}My Profile - Trekking Management System{% endblock %}
+
+{% block content %}
+<div class="row justify-content-center mb-4">
+    <div class="col-lg-6">
+        <div class="row align-items-center">
+            <div class="col">
+                <h2 class="text-brand-forest mb-0 fw-bold"><i class="bi bi-person-gear me-2"></i>My Profile</h2>
+                <p class="text-muted mb-0">Modify login profile particulars and credentials.</p>
+            </div>
+            <div class="col-auto">
+                <a href="{{ url_for('user.dashboard') }}" class="btn btn-outline-secondary btn-sm"><i class="bi bi-arrow-left me-1"></i> Dashboard</a>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="row justify-content-center g-4">
+    <div class="col-lg-6">
+        <div class="card border-0 shadow-sm p-4">
+            <div class="form-section-header">
+                <h5 class="form-section-title fw-bold"><i class="bi bi-person-vcard me-2 text-brand-terracotta"></i>Personal Information</h5>
+                <p class="form-section-desc">Update your account email address.</p>
+            </div>
+            <form method="POST" action="">
+                {{ form.hidden_tag() }}
+                
+                <div class="mb-3">
+                    <label class="form-label"><i class="bi bi-person me-1"></i> Username</label>
+                    <input type="text" id="username-display" class="form-control" value="{{ current_user.username }}" readonly disabled>
+                    <small class="text-muted">Username cannot be changed.</small>
+                </div>
+                
+                {{ render_field(form.email) }}
+                
+                <div class="d-grid mt-4">
+                    <button type="submit" class="btn btn-brand btn-lg"><i class="bi bi-check-lg me-1"></i> Save Profile Settings</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+{% endblock %}
